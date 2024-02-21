@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5 Ladies</title>
+  <style>
+.custom-image-slider {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    height: 0;
+    padding-bottom: 75%; /* Adjust this value according to your image aspect ratio */
+  }
+
+  .slider-before,
+  .slider-after {
+    position: absolute;
+    width: 100%;
+    display: block;
+    top: 0;
+    left: 0;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .slider-after {
+    overflow: hidden;
+  }
+
+  .slider-handle {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 4px;
+    height: 100%;
+    background-color: #fff;
+    cursor: ew-resize;
+  }
+
+.slider-handle::before,
+.slider-handle::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+  cursor: ew-resize;
+  transition: all 0.2s ease-out; /* Add transition property */
+}
+
+.slider-handle::before {
+  left: -24px;
+  border-right: 16px solid #fff;
+}
+
+.slider-handle::after {
+  right: -24px;
+  border-left: 16px solid #fff;
+} 
+</style>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const container = document.querySelector(".custom-image-slider");
+    const afterImage = document.querySelector(".slider-after");
+    const handle = document.querySelector(".slider-handle");
+
+    // Set initial handle position and clipPath
+    const initialPercentage = 50;
+    handle.style.left = `${initialPercentage}%`;
+    afterImage.style.clipPath = `inset(0 ${100 - initialPercentage}% 0 0)`;
+
+    let dragging = false;
+    let lastX = 0;
+
+    // Add mouse event listeners
+    handle.addEventListener("mousedown", (e) => {
+      dragging = true;
+      lastX = e.clientX;
+      e.preventDefault();
+    });
+
+    document.addEventListener("mouseup", () => {
+      dragging = false;
+    });
+
+    document.addEventListener("mouseleave", () => {
+      dragging = false;
+    });
+
+    document.addEventListener("mousemove", (e) => {
+      if (!dragging) return;
+
+      const rect = container.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      let widthPercentage = (x / rect.width) * 100;
+
+      // Add constraint to keep the handle within 1% of either edge
+      widthPercentage = Math.max(0, Math.min(widthPercentage, 100));
+
+      // Update handle position using requestAnimationFrame
+      window.requestAnimationFrame(() => {
+        handle.style.left = `${widthPercentage}%`;
+        afterImage.style.clipPath = `inset(0 ${100 - widthPercentage}% 0 0)`;
+      });
+
+      lastX = x;
+    });
+
+    // Add touch event listeners
+    handle.addEventListener("touchstart", (e) => {
+      dragging = true;
+      lastX = e.touches[0].clientX;
+      e.preventDefault();
+    });
+
+    document.addEventListener("touchend", () => {
+      dragging = false;
+    });
+
+    container.addEventListener("touchcancel", () => {
+      dragging = false;
+    });
+
+    container.addEventListener("touchmove", (e) => {
+      if (!dragging) return;
+
+      const rect = container.getBoundingClientRect();
+      const x = e.touches[0].clientX - rect.left;
+      let widthPercentage = (x / rect.width) * 100;
+
+      // Add constraint to keep the handle within 1% of either edge
+      widthPercentage = Math.max(0, Math.min(widthPercentage, 100));
+
+      // Update handle position using requestAnimationFrame
+      window.requestAnimationFrame(() => {
+        handle.style.left = `${widthPercentage}%`;
+        afterImage.style.clipPath = `inset(0 ${100 - widthPercentage}% 0 0)`;
+        });
+
+      lastX = x;
+    });
+});
+</script>  
+</head>
+<body>
+  <style>
+  .slider-before, .slider-after {
+    user-select: none;
+  }
+</style>
+
+<div class="custom-image-slider" id="customImageSlider">
+  <img class="slider-before" src="before.jpg" alt="Before">
+  <img class="slider-after" src="after.jpg" alt="After">
+  <div class="slider-handle"></div>
+</div>
+  
+</body>
+</html>
