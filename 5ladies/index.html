@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Before and After Slider</title>
+<style>
+    .container {
+        position: relative;
+        width: 500px; /* Adjust the width as needed */
+        height: 300px; /* Adjust the height as needed */
+        overflow: hidden;
+    }
+
+    .image {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .slider {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        -webkit-appearance: none;
+        appearance: none;
+        outline: none;
+    }
+
+    .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 15px; /* Adjust the thumb width as needed */
+        height: 15px; /* Adjust the thumb height as needed */
+        background: #000;
+        cursor: ew-resize;
+    }
+
+    .slider::-moz-range-thumb {
+        width: 15px; /* Adjust the thumb width as needed */
+        height: 15px; /* Adjust the thumb height as needed */
+        background: #000;
+        cursor: ew-resize;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <img src="before.jpg" class="image" id="before">
+    <img src="after.jpg" class="image" id="after">
+    <input type="range" min="0" max="100" value="50" class="slider" id="slider">
+</div>
+
+<script>
+    const slider = document.getElementById('slider');
+    const before = document.getElementById('before');
+    const after = document.getElementById('after');
+
+    slider.addEventListener('input', () => {
+        const value = slider.value;
+        before.style.width = value + '%';
+        after.style.width = (100 - value) + '%';
+    });
+</script>
+
+</body>
+</html>
